@@ -1,0 +1,201 @@
+/* Mengimpor font Poppins dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+/* Palet Warna:
+   Black: #010101
+   White: #fefefe
+   Hibiscus (Pink Tua): #c62d70
+   Wine Berry (Ungu Tua): #5a213e
+   Venus (Abu-abu): #939192
+   Illusion (Pink Muda): #f2a1c7
+   Shamrock (Hijau): #33ce7d
+*/
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif; 
+    overflow: hidden;
+    color: #010101; 
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+}
+
+#sidebar {
+    width: 350px;
+    background-color: #fefefe; 
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+/* ======================================================== */
+/* PERUBAHAN RATA TENGAH SESUAI PERMINTAAN ANDA        */
+/* ======================================================== */
+
+#search-container {
+    padding: 15px;
+    background-color: #5a213e; 
+    border-bottom: 1px solid #e0e0e0; 
+    text-align: center; /* Membuat semua konten menjadi rata tengah */
+}
+
+#search-container h3 {
+    color: #fefefe; 
+    margin-bottom: 10px; /* Memberi jarak bawah dari judul ke input */
+}
+
+#results-panel h3, #dashboard h3 {
+    margin-top: 0;
+    font-weight: 600; 
+}
+
+#results-panel h3 {
+    text-align: left; /* Kembalikan text-align untuk judul panel ini */
+}
+
+#dashboard h3 {
+     text-align: left; /* Kembalikan text-align untuk judul dashboard ini */
+}
+
+#search-input {
+    width: 70%; /* Mengubah lebar agar lebih fleksibel */
+    padding: 8px;
+    border: 1px solid #939192; 
+    border-radius: 4px;
+    transition: border-color 0.3s;
+    font-family: 'Poppins', sans-serif; 
+    vertical-align: middle; /* Memastikan input dan button sejajar */
+}
+
+#search-input:focus {
+    outline: none;
+    border-color: #c62d70; 
+}
+
+#search-button {
+    width: 60px;
+    padding: 8px;
+    border: none;
+    background-color: #fefefe; 
+    color: #c62d70; 
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 5px; /* Memberi jarak antara input dan tombol */
+    vertical-align: middle; /* Memastikan input dan button sejajar */
+}
+
+#search-button:hover {
+    background-color: #f2a1c7; 
+    color: #5a213e;
+}
+
+/* ======================================================== */
+/* AKHIR DARI PERUBAHAN RATA TENGAH                     */
+/* ======================================================== */
+
+
+#results-panel {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+#results-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+#results-list li {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#results-list li strong {
+    font-weight: 600; 
+}
+
+#results-list li:hover {
+    background-color: #f2a1c7; 
+}
+
+#results-list .item-desc {
+    font-size: 0.8em;
+    color: #939192; 
+    font-weight: 400; 
+}
+
+#results-list li.selected {
+    background-color: #e0f8e9; 
+    border-left: 4px solid #33ce7d; 
+    padding-left: 6px;
+}
+
+
+#map-container {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#map {
+    height: 80%;
+    width: 100%;
+}
+
+#dashboard {
+    height: 20%;
+    background-color: #fefefe; 
+    border-top: 1px solid #e0e0e0;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+#dashboard-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.dashboard-item {
+    padding: 8px 12px;
+    background-color: #f2a1c7; 
+    color: #5a213e; 
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 600; 
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.dashboard-item:hover {
+    background-color: #c62d70; 
+    color: #fefefe; 
+}
+
+.loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(254, 254, 254, 0.8);
+    color: #010101; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2em;
+    z-index: 2000;
+    font-weight: 600;
+}
