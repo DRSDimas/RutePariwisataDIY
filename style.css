@@ -1,15 +1,4 @@
-/* Mengimpor font Poppins dari Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-
-/* Palet Warna:
-   Black: #010101
-   White: #fefefe
-   Hibiscus (Pink Tua): #c62d70
-   Wine Berry (Ungu Tua): #5a213e
-   Venus (Abu-abu): #939192
-   Illusion (Pink Muda): #f2a1c7
-   Shamrock (Hijau): #33ce7d
-*/
 
 body, html {
     margin: 0;
@@ -36,20 +25,16 @@ body, html {
     z-index: 1000;
 }
 
-/* ======================================================== */
-/* PERUBAHAN RATA TENGAH SESUAI PERMINTAAN ANDA        */
-/* ======================================================== */
-
 #search-container {
     padding: 15px;
     background-color: #5a213e; 
     border-bottom: 1px solid #e0e0e0; 
-    text-align: center; /* Membuat semua konten menjadi rata tengah */
+    text-align: center; 
 }
 
 #search-container h3 {
     color: #fefefe; 
-    margin-bottom: 10px; /* Memberi jarak bawah dari judul ke input */
+    margin-bottom: 10px;
 }
 
 #results-panel h3, #dashboard h3 {
@@ -58,21 +43,21 @@ body, html {
 }
 
 #results-panel h3 {
-    text-align: left; /* Kembalikan text-align untuk judul panel ini */
+    text-align: left; 
 }
 
 #dashboard h3 {
-     text-align: left; /* Kembalikan text-align untuk judul dashboard ini */
+     text-align: left; 
 }
 
 #search-input {
-    width: 70%; /* Mengubah lebar agar lebih fleksibel */
+    width: 70%; 
     padding: 8px;
     border: 1px solid #939192; 
     border-radius: 4px;
     transition: border-color 0.3s;
     font-family: 'Poppins', sans-serif; 
-    vertical-align: middle; /* Memastikan input dan button sejajar */
+    vertical-align: middle; 
 }
 
 #search-input:focus {
@@ -90,19 +75,14 @@ body, html {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s, color 0.3s;
-    margin-left: 5px; /* Memberi jarak antara input dan tombol */
-    vertical-align: middle; /* Memastikan input dan button sejajar */
+    margin-left: 5px; 
+    vertical-align: middle; 
 }
 
 #search-button:hover {
     background-color: #f2a1c7; 
     color: #5a213e;
 }
-
-/* ======================================================== */
-/* AKHIR DARI PERUBAHAN RATA TENGAH                     */
-/* ======================================================== */
-
 
 #results-panel {
     flex-grow: 1;
