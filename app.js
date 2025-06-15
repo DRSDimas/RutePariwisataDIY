@@ -1,22 +1,14 @@
-// =================================
-//      INISIALISASI & VARIABEL
-// =================================
 const map = L.map('map').setView([-7.7956, 110.3695], 11);
 const searchInput = document.getElementById('search-input');
 const searchButton = document.getElementById('search-button');
 const resultsList = document.getElementById('results-list');
 const dashboardList = document.getElementById('dashboard-list');
 
-let allPois = []; // Untuk menyimpan semua data POI dari GeoJSON
+let allPois = []; 
 let userMarker;
 let poiMarkersLayer = L.layerGroup().addTo(map);
 let currentWaypoints = [];
 
-// =========================================================
-//      MEMBUAT CUSTOM ICON UNTUK MARKER
-// =========================================================
-
-// Icon untuk Lokasi Wisata (Shamrock Green dengan Garis Luar Hitam)
 const shamrockIcon = L.icon({
     iconUrl: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
@@ -27,7 +19,7 @@ const shamrockIcon = L.icon({
     popupAnchor: [0, -32]
 });
 
-// Icon untuk Lokasi Pengguna (Hibiscus Pink)
+
 const userIcon = L.icon({
     iconUrl: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="36" height="36" fill="#c62d70">
@@ -39,12 +31,11 @@ const userIcon = L.icon({
 });
 
 
-// Setup peta dasar OpenStreetMap
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(map);
 
-// Setup kontrol routing OSRM
+
 const routingControl = L.Routing.control({
     waypoints: [],
     router: new L.Routing.OSRMv1({
@@ -54,14 +45,10 @@ const routingControl = L.Routing.control({
     addWaypoints: false,
     routeWhileDragging: false,
     fitSelectedRoutes: true,
-    createMarker: function() { return null; } // Jangan buat marker default
+    createMarker: function() { return null; } 
 }).addTo(map);
 
-// =================================
-//      FUNGSI-FUNGSI UTAMA
-// =================================
 
-// 1. Memuat data POI dari GeoJSON
 async function loadPois() {
     try {
         const response = await fetch('wisata_diy.geojson');
@@ -73,7 +60,7 @@ async function loadPois() {
     }
 }
 
-// 2. Geocoding alamat menggunakan Nominatim
+
 async function geocodeAddress(address) {
     showLoading('Mencari lokasi...');
     try {
@@ -94,7 +81,7 @@ async function geocodeAddress(address) {
     }
 }
 
-// 3. Menangani lokasi yang berhasil ditemukan
+
 function handleLocationFound(latLng, displayName) {
     map.setView(latLng, 13);
     if (userMarker) {
@@ -104,17 +91,17 @@ function handleLocationFound(latLng, displayName) {
         .bindPopup(`<b>Lokasi Anda:</b><br>${displayName}`)
         .openPopup();
     
-    currentWaypoints = [latLng]; // Reset waypoints
+    currentWaypoints = [latLng]; 
     findNearestPois(latLng);
 }
 
-// 4. Mencari POI terdekat (Strategi Cerdas Dua Langkah)
+
 async function findNearestPois(userLatLng) {
     showLoading('Mencari wisata terdekat...');
     resultsList.innerHTML = '';
     poiMarkersLayer.clearLayers();
 
-    // Langkah 1: Filter cepat 20 kandidat terdekat dengan jarak lurus
+  
     const poisWithDistance = allPois.map(poi => {
         const poiLatLng = L.latLng(poi.geometry.coordinates[1], poi.geometry.coordinates[0]);
         const distance = turf.distance(turf.point([userLatLng.lng, userLatLng.lat]), turf.point([poiLatLng.lng, poiLatLng.lat]));
@@ -123,7 +110,7 @@ async function findNearestPois(userLatLng) {
     poisWithDistance.sort((a, b) => a.distance - b.distance);
     const candidates = poisWithDistance.slice(0, 20);
 
-    // Langkah 2: Analisis waktu tempuh untuk 20 kandidat menggunakan OSRM
+   
     const promises = candidates.map(poi => {
         const poiLatLng = L.latLng(poi.geometry.coordinates[1], poi.geometry.coordinates[0]);
         const url = `https://router.project-osrm.org/route/v1/driving/${userLatLng.lng},${userLatLng.lat};${poiLatLng.lng},${poiLatLng.lat}?overview=false`;
@@ -141,11 +128,10 @@ async function findNearestPois(userLatLng) {
         const top5Pois = poisWithDuration.slice(0, 5);
 
         displayNearestResults(top5Pois);
-        displayPoiMarkers(candidates); // Tampilkan marker untuk semua kandidat
+        displayPoiMarkers(candidates); 
 
     } catch (error) {
         console.error("Error saat fetching OSRM:", error);
-        // Jika OSRM gagal, tampilkan berdasarkan jarak lurus saja
         displayNearestResults(candidates.slice(0, 5));
         displayPoiMarkers(candidates);
     } finally {
@@ -153,7 +139,6 @@ async function findNearestPois(userLatLng) {
     }
 }
 
-// 5. Menampilkan hasil POI terdekat di panel
 function displayNearestResults(pois) {
     resultsList.innerHTML = '<ul>' + pois.map(poi => {
         const durationInMinutes = poi.duration ? Math.round(poi.duration / 60) : 'N/A';
@@ -166,7 +151,6 @@ function displayNearestResults(pois) {
                 </li>`;
     }).join('') + '</ul>';
     
-    // Tambah event listener untuk setiap item list
     document.querySelectorAll('#results-list li').forEach(item => {
         item.addEventListener('click', (e) => {
             const coords = e.currentTarget.dataset.coords.split(',').map(Number);
@@ -181,7 +165,6 @@ function displayNearestResults(pois) {
     });
 }
 
-// 6. Menampilkan marker POI di peta
 function displayPoiMarkers(pois) {
     poiMarkersLayer.clearLayers();
     pois.forEach(poi => {
@@ -197,7 +180,6 @@ function displayPoiMarkers(pois) {
     });
 }
 
-// 7. Memperbarui dashboard "Searah"
 function updateDashboard(originLatLng, destinationLatLng) {
     dashboardList.innerHTML = '';
     const mainBearing = turf.bearing(
@@ -208,7 +190,7 @@ function updateDashboard(originLatLng, destinationLatLng) {
     const onTheWayPois = allPois.filter(poi => {
         const poiLatLng = L.latLng(poi.geometry.coordinates[1], poi.geometry.coordinates[0]);
         if (poiLatLng.equals(destinationLatLng) || poiLatLng.equals(originLatLng)) {
-            return false; // Abaikan titik awal dan tujuan
+            return false; 
         }
         
         const bearingToPoi = turf.bearing(
@@ -216,9 +198,8 @@ function updateDashboard(originLatLng, destinationLatLng) {
             turf.point([poiLatLng.lng, poiLatLng.lat])
         );
         
-        // Cek apakah bearingnya mirip (toleransi 30 derajat)
         const bearingDifference = Math.abs(mainBearing - bearingToPoi);
-        return bearingDifference < 30 || bearingDifference > 330; // Handle wrapping around 360 degrees
+        return bearingDifference < 30 || bearingDifference > 330;
     });
 
     onTheWayPois.forEach(poi => {
@@ -231,11 +212,9 @@ function updateDashboard(originLatLng, destinationLatLng) {
             const coords = item.dataset.coords.split(',').map(Number);
             const nextPoiLatLng = L.latLng(coords[0], coords[1]);
             
-            // Tambahkan ke rute yang sudah ada
             currentWaypoints.push(nextPoiLatLng);
             routingControl.setWaypoints(currentWaypoints);
             
-            // Perbarui dashboard untuk segmen berikutnya
             const lastLegOrigin = currentWaypoints[currentWaypoints.length - 2];
             updateDashboard(lastLegOrigin, nextPoiLatLng);
         });
@@ -244,7 +223,7 @@ function updateDashboard(originLatLng, destinationLatLng) {
     });
 }
 
-// Helper untuk menampilkan/menyembunyikan loading
+
 function showLoading(message) {
     let loadingDiv = document.getElementById('loading-overlay');
     if (!loadingDiv) {
@@ -265,23 +244,16 @@ function hideLoading() {
 }
 
 
-// =================================
-//      EVENT LISTENERS & EKSEKUSI
-// =================================
-
-// Event listener untuk tombol search
 searchButton.addEventListener('click', () => {
     if (searchInput.value) {
         geocodeAddress(searchInput.value);
     }
 });
 
-// Event listener untuk menekan 'Enter' di kolom search
 searchInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter' && searchInput.value) {
         geocodeAddress(searchInput.value);
     }
 });
 
-// Jalankan fungsi loadPois saat aplikasi pertama kali dimuat
 window.onload = loadPois;
